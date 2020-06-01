@@ -9,10 +9,11 @@ class Card():
 class CardSerializer():
     def serialize(self, card):
         json_data = json.dumps(card, indent=2)
-        return json_data
+        return json.loads(json_data)
     def serialize_deck(self,deck):
         json_data = json.dumps(deck, default=lambda o: o.__dict__,indent=4)
-        return json_data
+
+        return json.loads(json_data)
     def deserialize_dec(self,json_data):
         deck = Deck(**json.loads(json_data))
         return deck

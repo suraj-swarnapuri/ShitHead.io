@@ -12,19 +12,21 @@ class Game():
         self.turn_token = turn_token
         self.current_stack = current_stack
         self.id = id
+
     def shuffle_deck(self):
         #shuffles deck
-        self.draw_pile = Deck()
         random.shuffle(self.draw_pile.cards)
     def join_game(self,player):
         self.players.append(player)
     def is_turn(self,player_id):
         return self.players[0].id == player_id
+    def get_card(self):
+        return self.draw_pile.pop
     
 class GameSerializer():
     def serialize(self, game):
         json_data = json.dumps(game, default=lambda  o: o.__dict__,indent=4)
-        return json_data
+        return json.loads(json_data)
     def deserialize(self,json_data):
         game = Game(**json.loads(json_data))
         return game
