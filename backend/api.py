@@ -8,6 +8,7 @@ app = Flask(__name__)
 player_map = dict()
 total_game = 0
 game_map = dict()
+test_val = 0
 
 # Player api
 
@@ -75,20 +76,7 @@ def create_game():
     game = Game(total_game)
     game.shuffle_deck()
     # pass out cards
-    hand = Deck(game.draw_pile.cards[0:3])
-    table = Deck(game.draw_pile.cards[3:7])
-    game.draw_pile.cards = game.draw_pile.cards[7:]
-    player.hand = hand
-    player.table = table
-    game.join_game(player)
-    game_map[total_game] = game
-    total_game += 1
-    return jsonify({
-        "status_code": "200",
-        "hand": cs.serialize_deck(player.hand),
-        "table": cs.serialize_deck(Deck(table.cards[0:2])),
-        "gameid": game.id,
-    })
+    
 
 
 @app.route('/game/join', methods=['POST'])
@@ -135,7 +123,7 @@ def game_turn(gameid):
     else:
         payload = request.form.get('payload')
 
-        return _post_turn(int(gameid), json.loads(payload))
+        return _post_turn(int(gameid), user, json.loads(payload))
 
 
 def _get_turn(gameid, user):
@@ -187,3 +175,11 @@ def _post_turn(gameid, user, payload):
     player = player_map[user]
     if game.is_turn(player):
         submit = cs.deserialize_dec(payload['submit'])
+
+@app.route('/test/concurrency')
+def test_con():
+    global test_val
+    test_val+=1
+    return jsonify({
+        "val": test_val
+    })

@@ -1,4 +1,5 @@
 import json
+import random
 
 
 class Card():
@@ -30,12 +31,19 @@ class CardSerializer():
 
 class Deck():
     def __init__(self, cards=None):
+        # cards is a stack of Card's
         if cards == None:
             self.cards = make_deck()
         else:
             self.cards = cards
         self.deck_length = len(self.cards)
-
+    def shuffle(self):
+        random.shuffle(self.cards)
+    def draw(self):
+        if self.deck_length == 0:
+            return None
+        self.deck_length -=1
+        return self.cards.pop()
 
 def make_deck():
     suits = ["Diamonds", "Spades", "Hearts", "Clovers"]
